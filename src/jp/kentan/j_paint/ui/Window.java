@@ -18,7 +18,7 @@ class Window extends JFrame implements WindowListener {
 
         this.setLayout(new BorderLayout());
 
-        this.setJMenuBar(new MenuBar());
+        this.setJMenuBar(new MenuBar(listener));
 
         this.add(optionBar = new OptionBar(listener), BorderLayout.NORTH);
         this.add(new SideBar(controller, listener), BorderLayout.WEST);

@@ -17,6 +17,8 @@ public class Tool {
     Font font = new JLabel().getFont();
     String text = "Text";
     boolean isShape = true;
+    boolean isCircle = true; //Brush, Eraser
+    boolean isStamp = true;
     int size = 1;
 
     Tool(TYPE type){
@@ -26,11 +28,15 @@ public class Tool {
     }
 
     void update(){
-        if(isShape && (type != TYPE.PEN && type != TYPE.BRUSH)){
+        if(isShape && (type != TYPE.PEN && type != TYPE.BRUSH && type != TYPE.ERASER)){
             stroke = new BasicStroke(size, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 100.0f);
 
         }else{
-            stroke = new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0);
+            if(isCircle){
+                stroke = new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0);
+            }else{
+                stroke = new BasicStroke(size);
+            }
         }
 
         strokeDash = new BasicStroke(size, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 100.0f, new float[]{size*3}, 0);

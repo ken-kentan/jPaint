@@ -3,6 +3,7 @@ package jp.kentan.j_paint.ui;
 import jp.kentan.j_paint.JPaintController;
 import jp.kentan.j_paint.layer.LayerController;
 import jp.kentan.j_paint.tool.Tool;
+import jp.kentan.j_paint.ui.component.BrushRadioButton;
 import jp.kentan.j_paint.ui.component.CommandButton;
 import jp.kentan.j_paint.ui.component.CornerRadioButton;
 import jp.kentan.j_paint.ui.component.ToolButton;
@@ -11,9 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kentaro on 2017/01/07.
- */
+
 public class UIController {
     private JPaintController controller;
     private Window window;
@@ -65,7 +64,7 @@ public class UIController {
     }
 
     //オプションパネル更新
-    public void updateOptionBar(Tool.TYPE type, CornerRadioButton.TYPE typeCorner, int size){
+    public void updateOptionBar(Tool.TYPE type, int size, CornerRadioButton.TYPE typeCorner, BrushRadioButton.TYPE typeBrush){
         window.optionBar.title.setText(OptionBar.toolName[type.ordinal()]);
         updateToolSize(size);
 
@@ -75,10 +74,16 @@ public class UIController {
             window.optionBar.setCornerButton(null);
         }
 
-        if(type == Tool.TYPE.LINE || type == Tool.TYPE.RECT || type == Tool.TYPE.OVAL || type == Tool.TYPE.BRUSH){
+        if(type == Tool.TYPE.LINE || type == Tool.TYPE.RECT || type == Tool.TYPE.OVAL || type == Tool.TYPE.BRUSH || type == Tool.TYPE.ERASER){
             window.optionBar.setSizePanel(true);
         }else{
             window.optionBar.setSizePanel(false);
+        }
+
+        if(type == Tool.TYPE.BRUSH || type == Tool.TYPE.ERASER){
+            window.optionBar.setBrushButton(typeBrush);
+        }else{
+            window.optionBar.setBrushButton(null);
         }
 
         window.optionBar.setFontPanel(type == Tool.TYPE.TEXT);
@@ -98,22 +103,12 @@ public class UIController {
 
     //オプションパネルのフォントサイズ更新
     public void updateFontSize(int size){
-        window.optionBar.setFontSize(size + " pt");
+        window.optionBar.setFontSize(size + " px");
     }
 
     //オプションパネルのフォントサイズ復元
     public void restoreFontSize(){
         window.optionBar.restoreFontSize();
-    }
-
-    //オプションパネルの入力テキスト更新
-    public void updateInputText(String text){
-        window.optionBar.setInputText(text);
-    }
-
-    //オプションパネルの入力テキスト復元
-    public void restoreInputText(){
-        window.optionBar.restoreInputText();
     }
 
 

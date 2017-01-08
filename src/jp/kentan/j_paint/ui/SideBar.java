@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class SideBar extends JPanel {
+class SideBar extends JPanel {
     private static final Dimension BUTTON_SIZE = new Dimension(40, 40);
 
     SideBar(UIController controller, UIEventListener listener){
@@ -29,6 +29,7 @@ public class SideBar extends JPanel {
         ToolButton btnTextTool = new ToolButton(R.TEXT, Tool.TYPE.TEXT);
         ToolButton btnPenTool  = new ToolButton(R.PEN, Tool.TYPE.PEN);
         ToolButton btnBrushTool = new ToolButton(R.BRUSH, Tool.TYPE.BRUSH);
+        ToolButton btnEraserTool = new ToolButton(R.ERASER, Tool.TYPE.ERASER);
 
         CommandButton btnUndo  = new CommandButton(R.UNDO, CommandButton.CMD.UNDO);
         CommandButton btnRedo = new CommandButton(R.REDO, CommandButton.CMD.REDO);
@@ -39,6 +40,7 @@ public class SideBar extends JPanel {
         btnTextTool.setPreferredSize(BUTTON_SIZE);
         btnPenTool.setPreferredSize(BUTTON_SIZE);
         btnBrushTool.setPreferredSize(BUTTON_SIZE);
+        btnEraserTool.setPreferredSize(BUTTON_SIZE);
 
         btnUndo.setPreferredSize(BUTTON_SIZE);
         btnRedo.setPreferredSize(BUTTON_SIZE);
@@ -73,15 +75,19 @@ public class SideBar extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
+        panelTools.add(btnEraserTool, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         gbc.insets = new Insets(5, 0, 0, 0);
         panelTools.add(btnUndo, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         panelTools.add(btnRedo, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 0, 0, 0);
         panelTools.add(btnColor, gbc);
@@ -92,6 +98,7 @@ public class SideBar extends JPanel {
         controller.add(btnTextTool);
         controller.add(btnPenTool);
         controller.add(btnBrushTool);
+        controller.add(btnEraserTool);
 
         controller.add(btnUndo);
         controller.add(btnRedo);
@@ -102,6 +109,7 @@ public class SideBar extends JPanel {
         btnTextTool.addActionListener(listener);
         btnPenTool.addActionListener(listener);
         btnBrushTool.addActionListener(listener);
+        btnEraserTool.addActionListener(listener);
 
         btnUndo.addActionListener(listener);
         btnRedo.addActionListener(listener);

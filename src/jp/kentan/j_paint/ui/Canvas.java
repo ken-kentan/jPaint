@@ -7,21 +7,22 @@ import java.awt.*;
 
 
 class Canvas extends JPanel {
-    private static final Dimension DEFAULT_SIZE = new Dimension(500, 500);
+    private LayerController layer = null;
 
     Canvas(){
         this.setBackground(Color.GRAY);
         this.setLayout(new GridBagLayout());
 
-//        JPanel test = new JPanel();
-//        test.setPreferredSize(DEFAULT_SIZE);
-//        test.setMinimumSize(DEFAULT_SIZE);
-
         System.out.println("Canvas create.");
     }
 
     void setLayer(LayerController layer){
-        this.add(layer);
+        if(this.layer != null){
+            this.remove(this.layer);
+            System.out.println("Previous LayerController removed.");
+        }
+
+        this.add(this.layer = layer);
 
         validate();
         repaint();

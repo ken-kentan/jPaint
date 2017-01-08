@@ -5,6 +5,7 @@ import jp.kentan.j_paint.tool.Tool;
 import jp.kentan.j_paint.tool.ToolController;
 import jp.kentan.j_paint.ui.Dialog;
 import jp.kentan.j_paint.ui.UIController;
+import jp.kentan.j_paint.ui.component.BrushRadioButton;
 import jp.kentan.j_paint.ui.component.CornerRadioButton;
 
 import java.awt.*;
@@ -27,6 +28,33 @@ public class JPaintController {
         ui.updateCommandButtonStatus(layer.canUndo(), layer.canRedo());
 
         this.ui.setVisible(true);
+
+        System.out.println("Welcome to jPaint! <3");
+    }
+
+    public void createNewCanvas(String[] strSize){
+        Dimension size;
+        try{
+            int w, h;
+            w = Integer.parseInt(strSize[0]);
+            h = Integer.parseInt(strSize[1]);
+
+            w = Math.max(1, w);
+            h = Math.max(1, h);
+
+            size = new Dimension(w, h);
+        }catch (Exception exc){
+            System.out.println(exc.getMessage());
+            Dialog.showWarningMsg("無効な入力です。 整数を入力して下さい。");
+            return;
+        }
+
+        if(size.width > 1920 || size.height > 1080){
+            Dialog.showWarningMsg("無効な入力です。 最大サイズは 1920 pixel * 1080 pixelです。");
+            return;
+        }
+
+        this.ui.setLayer(this.layer = new LayerController(this, this.tool, size));
     }
 
     public void undo(){
@@ -45,7 +73,7 @@ public class JPaintController {
 
     public void setLayerTool(Tool.TYPE type){
         tool.set(type);
-        ui.updateOptionBar(tool.getType(),tool.getCornerType(), tool.getSize());
+        ui.updateOptionBar(tool.getType(), tool.getSize(), tool.getCornerType(), tool.getBrushType());
         ui.updateToolButtonStatus(type);
     }
 
@@ -69,10 +97,10 @@ public class JPaintController {
         int size;
 
         try {
-            size = Integer.parseInt(strSize.replace("pt", "").replaceAll(" ", ""));
+            size = Integer.parseInt(strSize.replace("px", "").replaceAll(" ", ""));
             size = Math.max(1, Math.min(1000, size));
         }catch (Exception e){
-            Dialog.showWarningMsg("無効な入力です。 1 point から 1000 point の整数を入力して下さい。");
+            Dialog.showWarningMsg("無効な入力です。 1 pixel から 1000 pixel の整数を入力して下さい。");
             ui.restoreFontSize();
             return;
         }
@@ -91,7 +119,11 @@ public class JPaintController {
     }
 
     public void setLayerToolCornerType(CornerRadioButton.TYPE type){
-        tool.set(type == CornerRadioButton.TYPE.SHARP);
+        tool.setShape(type == CornerRadioButton.TYPE.SHARP);
+    }
+
+    public void setLayerToolBrushType(BrushRadioButton.TYPE type){
+        tool.setBrush(type == BrushRadioButton.TYPE.CIRCLE);
     }
 
     public void setLayerToolFont(Font font){
@@ -100,12 +132,16 @@ public class JPaintController {
 
     public void setLayerToolText(String text){
         if(text == null || text.length() <= 0){
-            Dialog.showWarningMsg("１文字以上入力して下さい。");
-            ui.restoreInputText();
+            tool.set("|");
+            layer.updateInputText();
             return;
         }
 
         tool.set(text);
-        ui.updateInputText(text);
+        layer.updateInputText();
+    }
+
+    public void setLayerToolTextBrush(boolean isBrush){
+        tool.setTextBrush(isBrush);
     }
 }

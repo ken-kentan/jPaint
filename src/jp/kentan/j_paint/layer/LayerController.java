@@ -29,6 +29,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
         this.setPreferredSize(sizeCanvas);
         this.setMinimumSize(sizeCanvas);
+        this.setBackground(Color.WHITE); //背景色
 
         layer = new Layer(this.tool, sizeCanvas);
 
@@ -86,6 +87,11 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         layer = new Layer(this.tool, sizeCanvas);
 
         controller.updateCommandButtonStatus();
+    }
+
+    public void updateInputText(){
+        layer.moved(null);
+        repaint();
     }
 
     private boolean isLeftButton(MouseEvent e){

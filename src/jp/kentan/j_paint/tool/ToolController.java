@@ -1,5 +1,6 @@
 package jp.kentan.j_paint.tool;
 
+import jp.kentan.j_paint.ui.component.BrushRadioButton;
 import jp.kentan.j_paint.ui.component.CornerRadioButton;
 
 import java.awt.*;
@@ -20,7 +21,9 @@ public class ToolController {
         brush  = new Tool(Tool.TYPE.BRUSH);
         eraser = new Tool(Tool.TYPE.ERASER);
 
+        //初期値
         text.size = 50;
+        eraser.color = Color.WHITE;
     }
 
     public void set(Tool.TYPE type){
@@ -42,6 +45,9 @@ public class ToolController {
                 break;
             case BRUSH:
                 tool = brush;
+                break;
+            case ERASER:
+                tool = eraser;
                 break;
         }
 
@@ -100,6 +106,9 @@ public class ToolController {
             case BRUSH:
                 brush.size = size;
                 break;
+            case ERASER:
+                eraser.size = size;
+                break;
         }
 
         tool.update();
@@ -107,7 +116,7 @@ public class ToolController {
         System.out.println("Tool size(" + size + ") set.");
     }
 
-    public void set(boolean isShape){
+    public void setShape(boolean isShape){
         switch (tool.get()){
             case LINE:
                 line.isShape = isShape;
@@ -122,6 +131,30 @@ public class ToolController {
         tool.update();
 
         System.out.println("Tool shape(" + isShape + ") set.");
+    }
+
+    public void setBrush(boolean isCircle){
+        switch (tool.get()){
+            case BRUSH:
+                brush.isCircle = isCircle;
+                tool = brush;
+                break;
+            case ERASER:
+                eraser.isCircle = isCircle;
+                tool = eraser;
+                break;
+        }
+
+        tool.update();
+
+        System.out.println("Tool circle(" + isCircle + ") set.");
+    }
+
+    public void setTextBrush(boolean isBrush){
+        text.isStamp = !isBrush;
+        tool = text;
+
+        System.out.println("Tool stamp(" + !isBrush + ") set.");
     }
 
     /*
@@ -170,5 +203,21 @@ public class ToolController {
         }else{
             return CornerRadioButton.TYPE.ROUND;
         }
+    }
+
+    public BrushRadioButton.TYPE getBrushType(){
+        if(tool.isCircle){
+            return BrushRadioButton.TYPE.CIRCLE;
+        }else{
+            return BrushRadioButton.TYPE.SQUARE;
+        }
+    }
+
+    public boolean isStamp(){
+        return tool.isStamp;
+    }
+
+    public boolean isCircleBrush(){
+        return tool.isCircle;
     }
 }

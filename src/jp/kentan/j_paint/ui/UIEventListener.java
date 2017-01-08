@@ -1,21 +1,23 @@
 package jp.kentan.j_paint.ui;
 
 import jp.kentan.j_paint.JPaintController;
-import jp.kentan.j_paint.ui.component.CommandButton;
-import jp.kentan.j_paint.ui.component.CornerRadioButton;
-import jp.kentan.j_paint.ui.component.FontsComboBox;
-import jp.kentan.j_paint.ui.component.ToolButton;
+import jp.kentan.j_paint.ui.component.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 
 
-class UIEventListener implements ActionListener, ChangeListener, MouseListener, ItemListener {
+class UIEventListener implements ActionListener, ChangeListener, MouseListener, ItemListener, DocumentListener {
     private UIController ui;
     private JPaintController controller;
+
+    private volatile boolean isThreadRunning = false;
 
     UIEventListener(JPaintController controller, UIController ui){
         this.controller = controller;
@@ -45,17 +47,35 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
             textField.setFocusable(false);
             textField.setFocusable(true);
 
-            switch (textField.getName()){
-                case "ToolSize":
-                    controller.setLayerToolSize(textField.getText());
-                    break;
-                case "InputText":
-                    controller.setLayerToolText(textField.getText());
-                    break;
+            if(textField.getName().equals("ToolSize")){
+                controller.setLayerToolSize(textField.getText());
             }
         }else if(obj instanceof CornerRadioButton){
             CornerRadioButton button = (CornerRadioButton)obj;
             controller.setLayerToolCornerType(button.get());
+        }else if(obj instanceof BrushRadioButton){
+            BrushRadioButton button = (BrushRadioButton)obj;
+            controller.setLayerToolBrushType(button.get());
+        }else if(obj instanceof JCheckBox){
+            JCheckBox checkBox = (JCheckBox)obj;
+
+            if(checkBox.getName().equals("TextBrushOption")){
+                controller.setLayerToolTextBrush(checkBox.isSelected());
+            }
+        }else if(obj instanceof JMenuItem){
+            JMenuItem item = (JMenuItem)obj;
+
+            switch (item.getActionCommand()){
+                case "New":
+                    String[] strSize = Dialog.showNewCanvasDialog();
+
+                    if(strSize != null) controller.createNewCanvas(strSize);
+                    break;
+                case "Exit":
+                    System.out.println("Bye bye.");
+                    System.exit(0);
+                    break;
+            }
         }
     }
 
@@ -86,6 +106,33 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
 
             controller.setLayerToolSize(slider.getValue());
         }
+    }
+
+    public void changedUpdate(DocumentEvent e) {
+    }
+
+    public void removeUpdate(DocumentEvent e) {
+        Document doc = e.getDocument();
+
+        SwingUtilities.invokeLater(() -> {
+            try {
+                controller.setLayerToolText(doc.getText(0 , doc.getLength()));
+            }catch (Exception exc){
+                Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
+            }
+        });
+    }
+
+    public void insertUpdate(DocumentEvent e) {
+        Document doc = e.getDocument();
+
+        SwingUtilities.invokeLater(() -> {
+            try {
+                controller.setLayerToolText(doc.getText(0 , doc.getLength()));
+            }catch (Exception exc){
+                Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
+            }
+        });
     }
 
     public void mouseClicked(MouseEvent e){

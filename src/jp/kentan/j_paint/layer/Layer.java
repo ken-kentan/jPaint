@@ -14,6 +14,7 @@ class Layer extends BufferedImage {
     private Graphics2D g;
     private Point p1, p2;
     private boolean isHide = false;
+    private boolean isDragged = false;
 
     Layer(ToolController tool, Dimension size){
         super(size.width, size.height, BufferedImage.TYPE_4BYTE_ABGR);
@@ -42,6 +43,7 @@ class Layer extends BufferedImage {
 
     void dragged(Point p){
         this.p2 = p;
+        this.isDragged = true;
 
         int x = Math.min(p1.x, p2.x);
         int y = Math.min(p1.y, p2.y);
@@ -71,14 +73,31 @@ class Layer extends BufferedImage {
                 g.drawOval(x, y, width, height);
                 break;
             case TEXT:
+                if(tool.isStamp()) return;
+
                 g.setFont(tool.getFont());
                 g.setColor(tool.getColor());
                 g.drawString(tool.getText(), p.x, p.y);
                 break;
             case PEN:
             case BRUSH:
+            case ERASER:
                 g.setStroke(tool.getStroke());
-                g.drawLine(p1.x, p1.y, p2.x, p2.y);
+
+                if(tool.isCircleBrush()){
+                    g.drawLine(p1.x, p1.y, p2.x, p2.y);
+                }else{
+                    int plotX, plotY;
+                    double dif = Math.hypot(p2.x-p1.x, p2.x-p1.y);
+                    double difX = (p2.x-p1.x) / dif;
+                    double difY = (p2.y-p1.y) / dif;
+                    for (int i = 0; i < (int) dif; i++) {
+                        plotX = p1.x + (int)(difX * i);
+                        plotY = p1.y + (int)(difY * i);
+                        g.drawLine(plotX, plotY, plotX, plotY);
+                    }
+                    g.drawLine(p1.x, p1.y, p1.x, p1.y);
+                }
 
                 p1 = p2;
                 break;
@@ -112,6 +131,7 @@ class Layer extends BufferedImage {
                 break;
             case PEN:
             case BRUSH:
+            case ERASER:
                 g.setStroke(tool.getStroke());
                 g.drawLine(p1.x, p1.y, p2.x, p2.y);
                 break;
@@ -128,14 +148,20 @@ class Layer extends BufferedImage {
                 g.drawLine(p.x, p.y, p.x, p.y);
                 break;
             case TEXT:
+                if(p == null) p = p1;
+
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
                 g.setFont(tool.getFont());
                 g.drawString(tool.getText(), p.x, p.y);
+
+                p1 = p;
                 break;
         }
     }
 
     void exited(){
+        if(isDragged) return;
+
         switch (tool.getType()){
             case BRUSH:
             case TEXT:
