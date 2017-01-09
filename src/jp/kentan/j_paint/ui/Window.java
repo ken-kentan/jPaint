@@ -8,7 +8,8 @@ import java.awt.event.WindowListener;
 
 class Window extends JFrame implements WindowListener {
     Canvas canvas;
-    OptionBar optionBar;
+    OptionBar option;
+    InfoBar info;
 
     Window(UIController controller, UIEventListener listener){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,13 +19,15 @@ class Window extends JFrame implements WindowListener {
 
         this.setLayout(new BorderLayout());
 
-        this.setJMenuBar(new MenuBar(listener));
+        this.setJMenuBar(new MenuBar(controller, listener));
 
-        this.add(optionBar = new OptionBar(listener), BorderLayout.NORTH);
+        this.add(option = new OptionBar(listener), BorderLayout.NORTH);
         this.add(new SideBar(controller, listener), BorderLayout.WEST);
-        this.add(new InfoBar(), BorderLayout.SOUTH);
+        this.add(info = new InfoBar(), BorderLayout.SOUTH);
 
         this.add(canvas = new Canvas(), BorderLayout.CENTER);
+
+        this.addWindowListener(listener);
     }
 
 

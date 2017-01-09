@@ -5,7 +5,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 
-class FileMenu extends JMenu {
+public class FileMenu extends JMenu {
 
     FileMenu(UIEventListener listener){
         super("ファイル");
@@ -45,5 +45,17 @@ class FileMenu extends JMenu {
         menuSave.addActionListener(listener);
         menuSaveAs.addActionListener(listener);
         menuExit.addActionListener(listener);
+    }
+
+    public static String getSuffix(String fileName) {
+        if (fileName == null) return null;
+
+        int point = fileName.lastIndexOf(".");
+
+        if (point != -1) {
+            return fileName.substring(point + 1);
+        }
+
+        return null;
     }
 }

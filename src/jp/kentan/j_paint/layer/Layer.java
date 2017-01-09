@@ -29,11 +29,26 @@ class Layer extends BufferedImage {
         System.out.println("Layer create.(" + size.width + " * " + size.height + ")");
     }
 
+    Layer(ToolController tool, BufferedImage image){
+        super(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+
+        this.tool = tool;
+
+        g = this.createGraphics();
+        g.setColor(Color.BLACK);
+        g.setBackground(ALPHA);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+
+        System.out.println("Layer create.(" + image + ")");
+    }
+
     void setHide(boolean isHide){
         this.isHide = isHide;
     }
 
-    boolean getHide(){
+    boolean isHide(){
         return  isHide;
     }
 

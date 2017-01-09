@@ -1,7 +1,9 @@
 package jp.kentan.j_paint.ui;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
 
 /**
  * Created by kentaro on 2017/01/07.
@@ -15,9 +17,20 @@ public class Dialog {
         System.out.println("Dialog initialized.");
     }
 
+    public static int showConfirmMsg(String msg, int option){
+        return JOptionPane.showConfirmDialog(window,
+                msg, "jPaint", option);
+    }
+
     public static void showWarningMsg(String msg){
         JOptionPane.showMessageDialog(window,
                 msg, "jPaint",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static int showConfirmWarningMsg(String msg, int option){
+        return JOptionPane.showConfirmDialog(window,
+                msg, "jPaint", option,
                 JOptionPane.WARNING_MESSAGE);
     }
 
@@ -57,5 +70,62 @@ public class Dialog {
         }else{
             return null;
         }
+    }
+
+    public static File showImageFileChooser(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("開く");
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("すべての画像形式(*.JPG;*.JPEG;*.PNG)", "jpg", "jpeg", "png"));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG(*.JPG;*.JPEG)", "jpg", "jpeg"));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG(*.PNG)", "png"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        fileChooser.setCurrentDirectory(new File
+                (System.getProperty("user.home") + System.getProperty("file.separator")+ "Pictures"));
+
+        if(fileChooser.showDialog(window, "開く") == JFileChooser.APPROVE_OPTION){
+            return fileChooser.getSelectedFile();
+        }else{
+            return null;
+        }
+    }
+
+    public static File showSaveFileChooser(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("名前を付けて保存");
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("すべての画像形式(*.JPG;*.JPEG;*.PNG)", "jpg", "jpeg", "png"));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG(*.JPG;*.JPEG)", "jpg", "jpeg"));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG(*.PNG)", "png"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        fileChooser.setCurrentDirectory(new File
+                (System.getProperty("user.home") + System.getProperty("file.separator")+ "Pictures"));
+
+        File file;
+        while (true) {
+            if (fileChooser.showSaveDialog(window) != JFileChooser.APPROVE_OPTION) return null;
+
+            file = fileChooser.getSelectedFile();
+
+            String suffix = FileMenu.getSuffix(file.getName());
+
+            if(suffix == null) file = new File(file.getAbsoluteFile() + ".png");
+
+            if (file.exists()) {
+                switch (showConfirmMsg(file.getName() + " は既に存在します。\n上書きしますか？", JOptionPane.YES_NO_CANCEL_OPTION)) {
+                    case JOptionPane.YES_OPTION:
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        continue;
+                    case JOptionPane.CANCEL_OPTION:
+                        return null;
+                }
+                break;
+            } else {
+                break;
+            }
+        }
+
+        return file;
     }
 }

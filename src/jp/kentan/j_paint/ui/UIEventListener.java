@@ -11,13 +11,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 
-class UIEventListener implements ActionListener, ChangeListener, MouseListener, ItemListener, DocumentListener {
+class UIEventListener implements ActionListener, ChangeListener, MouseListener, ItemListener, DocumentListener, WindowListener {
     private UIController ui;
     private JPaintController controller;
-
-    private volatile boolean isThreadRunning = false;
 
     UIEventListener(JPaintController controller, UIController ui){
         this.controller = controller;
@@ -29,11 +28,11 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
     public void actionPerformed(ActionEvent e) {
         Object obj = e.getSource();
 
-        if(obj instanceof ToolButton){
+        if(obj instanceof ToolButton){ //サイドパネルのツールボタン
             ToolButton button = (ToolButton)obj;
 
             controller.setLayerTool(button.get());
-        }else if(obj instanceof CommandButton){
+        }else if(obj instanceof CommandButton){ //サイドパネルのRedo,Undoボタン
             CommandButton button = (CommandButton)obj;
 
             if(button.get() == CommandButton.CMD.UNDO){
@@ -63,17 +62,55 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
                 controller.setLayerToolTextBrush(checkBox.isSelected());
             }
         }else if(obj instanceof JMenuItem){
+            File file = null;
             JMenuItem item = (JMenuItem)obj;
 
             switch (item.getActionCommand()){
                 case "New":
+                    if(!controller.checkCanvasSaved()) return;
+
                     String[] strSize = Dialog.showNewCanvasDialog();
 
                     if(strSize != null) controller.createNewCanvas(strSize);
                     break;
+                case "Open":
+                    if(!controller.checkCanvasSaved()) return;
+
+                    file = Dialog.showImageFileChooser();
+
+                    if(file != null) controller.createNewCanvasFromImage(file);
+                    break;
+                case "Save":
+                    if(!controller.saveCanvas(null)){ //untitledの場合,新規保存
+                        file = Dialog.showSaveFileChooser();
+
+                        if(file != null) controller.saveCanvas(file);
+                    }
+                    break;
+                case "Save As":
+                    file = Dialog.showSaveFileChooser();
+
+                    if(file != null) controller.saveCanvas(file);
+                    break;
                 case "Exit":
-                    System.out.println("Bye bye.");
-                    System.exit(0);
+                    controller.close();
+                    break;
+                case "ToolSelect":
+                    ToolMenuItem itemTool = (ToolMenuItem)obj;
+
+                    controller.setLayerTool(itemTool.get());
+                    break;
+                case "Command":
+                    CommandMenuItem itemCommand = (CommandMenuItem)obj;
+
+                    if(itemCommand.get() == CommandMenuItem.CMD.UNDO){
+                        controller.undo();
+                    }else{
+                        controller.redo();
+                    }
+                    break;
+                case "ClearAll":
+                    controller.clearCanvas();
                     break;
             }
         }
@@ -133,6 +170,28 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
                 Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
             }
         });
+    }
+
+    public void windowOpened(WindowEvent e){
+    }
+
+    public void windowClosing(WindowEvent e){
+        controller.close();
+    }
+
+    public void windowClosed(WindowEvent e){
+    }
+
+    public void windowIconified(WindowEvent e){
+    }
+
+    public void windowDeiconified(WindowEvent e){
+    }
+
+    public void windowActivated(WindowEvent e){
+    }
+
+    public void windowDeactivated(WindowEvent e){
     }
 
     public void mouseClicked(MouseEvent e){

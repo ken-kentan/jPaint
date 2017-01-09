@@ -4,17 +4,24 @@ import jp.kentan.j_paint.layer.LayerController;
 import jp.kentan.j_paint.tool.Tool;
 import jp.kentan.j_paint.tool.ToolController;
 import jp.kentan.j_paint.ui.Dialog;
+import jp.kentan.j_paint.ui.FileMenu;
 import jp.kentan.j_paint.ui.UIController;
 import jp.kentan.j_paint.ui.component.BrushRadioButton;
 import jp.kentan.j_paint.ui.component.CornerRadioButton;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 
 public class JPaintController {
     private UIController ui;
     private LayerController layer;
     private ToolController tool;
+
+    private File path = null;
 
     JPaintController(){
         this.ui = new UIController(this);
@@ -25,15 +32,51 @@ public class JPaintController {
 
         setLayerTool(Tool.TYPE.LINE);
 
-        ui.updateCommandButtonStatus(layer.canUndo(), layer.canRedo());
+        ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
+
+        updateWindowTitle();
 
         this.ui.setVisible(true);
 
         System.out.println("Welcome to jPaint! <3");
     }
 
+    public void close(){
+        if(!layer.isSaved()){
+            switch (Dialog.showConfirmMsg("終了する前に変更を保存しますか？", JOptionPane.YES_NO_CANCEL_OPTION)) {
+                case JOptionPane.YES_OPTION:
+                    if(path != null && saveCanvas(null)){
+                        break;
+                    }else{ //untitled
+                        File file = Dialog.showSaveFileChooser();
+
+                        if(file != null && saveCanvas(file)) break;
+                        else return;
+                    }
+                case JOptionPane.NO_OPTION:
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    return;
+            }
+        }
+
+        System.out.println("Bye bye.");
+        System.exit(0);
+    }
+
+    public void updateWindowTitle(){
+        boolean isSaved = layer.isSaved();
+
+        if(path == null){
+            ui.setTitle("jPaint -untitled" + (isSaved ? "" : " *"));
+        }else{
+            ui.setTitle("jPaint -" + path.getAbsolutePath() + (isSaved ? "" : " *"));
+        }
+    }
+
     public void createNewCanvas(String[] strSize){
         Dimension size;
+
         try{
             int w, h;
             w = Integer.parseInt(strSize[0]);
@@ -54,27 +97,85 @@ public class JPaintController {
             return;
         }
 
-        this.ui.setLayer(this.layer = new LayerController(this, this.tool, size));
+        path = null;
+        updateWindowTitle();
+
+        ui.setLayer(this.layer = new LayerController(this, this.tool, size));
+        ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
+    }
+
+    public void createNewCanvasFromImage(File file){
+        BufferedImage image;
+
+        try {
+            image = ImageIO.read(file);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            Dialog.showWarningMsg("画像を開けませんでした。\nエラー詳細: " + e.getMessage());
+            return;
+        }
+
+        path = file;
+        updateWindowTitle();
+
+        ui.setLayer(this.layer = new LayerController(this, this.tool, image));
+        ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
+    }
+
+    public boolean saveCanvas(File file){
+        BufferedImage image;
+
+        if(file == null){
+            if(path == null) return false;
+
+            file = path; //上書き保存
+        }
+
+        String suffix = FileMenu.getSuffix(file.getName());
+
+        try{
+            image = layer.merge(suffix);
+            ImageIO.write(image, suffix, file);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            Dialog.showWarningMsg("保存に失敗しました。\nエラー詳細: " + e.getMessage());
+            return false;
+        }
+
+        path = file;
+        updateWindowTitle();
+        ui.setInfoText(" 画像を保存しました。");
+        return true;
+    }
+
+    public void clearCanvas(){
+        int option = Dialog.showConfirmWarningMsg("この操作は戻すことが出来ません。実行しますか？", JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION){
+            layer.clear();
+
+            updateCommandButtonStatus();
+        }
     }
 
     public void undo(){
         layer.undo();
-        ui.updateCommandButtonStatus(layer.canUndo(), layer.canRedo());
+        ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
     }
 
     public void redo(){
         layer.redo();
-        ui.updateCommandButtonStatus(layer.canUndo(), layer.canRedo());
+        ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
     }
 
     public void updateCommandButtonStatus(){
-        ui.updateCommandButtonStatus(layer.canUndo(), layer.canRedo());
+        ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
     }
 
     public void setLayerTool(Tool.TYPE type){
         tool.set(type);
         ui.updateOptionBar(tool.getType(), tool.getSize(), tool.getCornerType(), tool.getBrushType());
-        ui.updateToolButtonStatus(type);
+        ui.updateToolStatus(type);
     }
 
     public void setLayerToolSize(String strSize){
@@ -143,5 +244,33 @@ public class JPaintController {
 
     public void setLayerToolTextBrush(boolean isBrush){
         tool.setTextBrush(isBrush);
+    }
+
+    //Canvasが消える場合に保存確認
+    public boolean checkCanvasSaved(){
+        if(!layer.isSaved()){
+            switch (Dialog.showConfirmMsg("変更を保存しますか？", JOptionPane.YES_NO_CANCEL_OPTION)) {
+                case JOptionPane.YES_OPTION:
+                    if(path != null && saveCanvas(null)){
+                        break;
+                    }else{ //untitled
+                        File file = Dialog.showSaveFileChooser();
+
+                        if(file != null && saveCanvas(file)) break;
+                        else return false;
+                    }
+                case JOptionPane.NO_OPTION:
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void updateInfoPointLabel(Point p){
+        String point = " x=" + p.x + ", y=" + p.y;
+        ui.setInfoText(point);
     }
 }

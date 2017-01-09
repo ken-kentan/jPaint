@@ -8,18 +8,20 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class LayerController extends JPanel implements MouseListener, MouseMotionListener {
+    private static final String[] SUFFIX_ALPHA_SUPPORT = new String[]{"png", "gif", "PNG", "GIF"};
     private JPaintController controller;
     private ToolController tool;
 
-    private Layer layer;
+    private Layer layer, background = null;
     private List<Layer> layerList = new ArrayList<>();
 
-    private int currentLayerIndex = 0, topLayerIndex = 0;
+    private int currentLayerIndex = 0, topLayerIndex = 0, saveLayerIndex = 0;
 
     private Dimension sizeCanvas;
 
@@ -39,6 +41,40 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         this.addMouseMotionListener(this);
 
         System.out.println("LayerController create.");
+    }
+
+    public LayerController(JPaintController controller, ToolController tool, BufferedImage image){
+        this.controller = controller;
+        this.tool = tool;
+
+        Dimension sizeCanvas = new Dimension(image.getWidth(), image.getHeight());
+
+        this.setPreferredSize(sizeCanvas);
+        this.setMinimumSize(sizeCanvas);
+        this.setBackground(Color.WHITE); //背景色
+
+        background = new Layer(this.tool, image);
+
+        layer = new Layer(this.tool, sizeCanvas);
+
+        this.sizeCanvas = sizeCanvas;
+
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+
+        System.out.println("LayerController create.");
+    }
+
+    public void clear(){
+        int size = layerList.size();
+
+        layerList.clear();
+
+        currentLayerIndex = topLayerIndex = 0;
+
+        repaint();
+
+        System.out.println("All Layer(" + size + ") removed.");
     }
 
     public void undo(){
@@ -69,6 +105,10 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         return currentLayerIndex < topLayerIndex;
     }
 
+    public boolean isSaved(){
+        return saveLayerIndex == currentLayerIndex;
+    }
+
     private void createNewLayer(){
         //最上部レイヤーでない場合
         if(currentLayerIndex < topLayerIndex){
@@ -89,6 +129,35 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         controller.updateCommandButtonStatus();
     }
 
+    public BufferedImage merge(String suffix){
+        BufferedImage image;
+
+        if(isSupportAlpha(suffix)){
+            image = new BufferedImage(sizeCanvas.width, sizeCanvas.height, BufferedImage.TYPE_4BYTE_ABGR);
+        }else{
+            image = new BufferedImage(sizeCanvas.width, sizeCanvas.height, BufferedImage.TYPE_3BYTE_BGR);
+        }
+
+        Graphics g = image.getGraphics();
+
+        //白背景
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, sizeCanvas.width, sizeCanvas.height);
+
+        if(background != null) g.drawImage(background, 0, 0, background.getWidth(), background.getHeight(), this);
+
+        for(Layer layer : layerList){
+            if(layer.isHide()) continue;
+            g.drawImage(layer, 0, 0, layer.getWidth(), layer.getHeight(), this);
+        }
+
+        saveLayerIndex = currentLayerIndex;
+
+        System.out.println("image merged.(" + layerList.size() + " layers)");
+
+        return image;
+    }
+
     public void updateInputText(){
         layer.moved(null);
         repaint();
@@ -102,13 +171,17 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        if(background != null) g.drawImage(background, 0, 0, background.getWidth(), background.getHeight(), this);
+
         for(Layer layer : layerList){
-            if(layer.getHide()) continue;
+            if(layer.isHide()) continue;
 
             g.drawImage(layer, 0, 0, layer.getWidth(), layer.getHeight(), this);
         }
 
         g.drawImage(layer, 0, 0, layer.getWidth(), layer.getHeight(), this);
+
+        controller.updateWindowTitle();
     }
 
     public void mousePressed(MouseEvent e) {
@@ -144,13 +217,29 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         if (!isLeftButton(e)) return;
 
         layer.dragged(e.getPoint());
+        controller.updateInfoPointLabel(e.getPoint());
 
         repaint();
     }
 
     public void mouseMoved(MouseEvent e){
         layer.moved(e.getPoint());
+        controller.updateInfoPointLabel(e.getPoint());
 
         repaint();
+    }
+
+    private boolean isSupportAlpha(String suffix){
+        for(String suffixAlpha : SUFFIX_ALPHA_SUPPORT){
+            if(suffix.equals(suffixAlpha)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Dimension getSize(){
+        return sizeCanvas;
     }
 }

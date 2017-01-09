@@ -3,10 +3,7 @@ package jp.kentan.j_paint.ui;
 import jp.kentan.j_paint.JPaintController;
 import jp.kentan.j_paint.layer.LayerController;
 import jp.kentan.j_paint.tool.Tool;
-import jp.kentan.j_paint.ui.component.BrushRadioButton;
-import jp.kentan.j_paint.ui.component.CommandButton;
-import jp.kentan.j_paint.ui.component.CornerRadioButton;
-import jp.kentan.j_paint.ui.component.ToolButton;
+import jp.kentan.j_paint.ui.component.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,6 +18,8 @@ public class UIController {
 
     private List<ToolButton> toolButtonList = new ArrayList<>();
     private List<CommandButton> cmdButtonList = new ArrayList<>();
+    private List<ToolMenuItem> toolMenuItemList = new ArrayList<>();
+    private List<CommandMenuItem> cmdMenuItemList = new ArrayList<>();
 
 
     public UIController(JPaintController controller){
@@ -37,6 +36,10 @@ public class UIController {
         window.setVisible(visible);
     }
 
+    public void setTitle(String title){
+        window.setTitle(title);
+    }
+
     void add(ToolButton button){
         toolButtonList.add(button);
     }
@@ -45,15 +48,27 @@ public class UIController {
         cmdButtonList.add(button);
     }
 
-    //選択されたToolButtonを無効化
-    public void updateToolButtonStatus(Tool.TYPE type){
+    void add(ToolMenuItem item){
+        toolMenuItemList.add(item);
+    }
+
+    void add(CommandMenuItem item){
+        cmdMenuItemList.add(item);
+    }
+
+    //選択されたToolを無効化
+    public void updateToolStatus(Tool.TYPE type){
         for(ToolButton button : toolButtonList){
             button.setEnabled(button.get() != type);
         }
+
+        for(ToolMenuItem item : toolMenuItemList){
+            item.setEnabled(item.get() != type);
+        }
     }
 
-    //選択されたToolButtonを無効化
-    public void updateCommandButtonStatus(boolean canUndo, boolean canRedo){
+    //選択されたCommandを無効化
+    public void updateCommandStatus(boolean canUndo, boolean canRedo){
         for(CommandButton button : cmdButtonList){
             if(button.get() == CommandButton.CMD.UNDO){
                 button.setEnabled(canUndo);
@@ -61,54 +76,62 @@ public class UIController {
                 button.setEnabled(canRedo);
             }
         }
+
+        for(CommandMenuItem item : cmdMenuItemList){
+            if(item.get() == CommandMenuItem.CMD.UNDO){
+                item.setEnabled(canUndo);
+            }else{
+                item.setEnabled(canRedo);
+            }
+        }
     }
 
     //オプションパネル更新
     public void updateOptionBar(Tool.TYPE type, int size, CornerRadioButton.TYPE typeCorner, BrushRadioButton.TYPE typeBrush){
-        window.optionBar.title.setText(OptionBar.toolName[type.ordinal()]);
+        window.option.title.setText(OptionBar.toolName[type.ordinal()]);
         updateToolSize(size);
 
         if(type == Tool.TYPE.LINE || type == Tool.TYPE.RECT){
-            window.optionBar.setCornerButton(typeCorner);
+            window.option.setCornerButton(typeCorner);
         }else{
-            window.optionBar.setCornerButton(null);
+            window.option.setCornerButton(null);
         }
 
         if(type == Tool.TYPE.LINE || type == Tool.TYPE.RECT || type == Tool.TYPE.OVAL || type == Tool.TYPE.BRUSH || type == Tool.TYPE.ERASER){
-            window.optionBar.setSizePanel(true);
+            window.option.setSizePanel(true);
         }else{
-            window.optionBar.setSizePanel(false);
+            window.option.setSizePanel(false);
         }
 
         if(type == Tool.TYPE.BRUSH || type == Tool.TYPE.ERASER){
-            window.optionBar.setBrushButton(typeBrush);
+            window.option.setBrushButton(typeBrush);
         }else{
-            window.optionBar.setBrushButton(null);
+            window.option.setBrushButton(null);
         }
 
-        window.optionBar.setFontPanel(type == Tool.TYPE.TEXT);
+        window.option.setFontPanel(type == Tool.TYPE.TEXT);
     }
 
     //オプションパネルのツール太さ更新
     public void updateToolSize(int size){
-        window.optionBar.sizeSlider.setValue(size);
-        window.optionBar.sizeTextField.setText(size + " px");
+        window.option.sizeSlider.setValue(size);
+        window.option.sizeTextField.setText(size + " px");
     }
 
     //オプションパネルのツール太さ復元
     public void restoreToolSize(){
-        int size = window.optionBar.sizeSlider.getValue();
-        window.optionBar.sizeTextField.setText(size + " px");
+        int size = window.option.sizeSlider.getValue();
+        window.option.sizeTextField.setText(size + " px");
     }
 
     //オプションパネルのフォントサイズ更新
     public void updateFontSize(int size){
-        window.optionBar.setFontSize(size + " px");
+        window.option.setFontSize(size + " px");
     }
 
     //オプションパネルのフォントサイズ復元
     public void restoreFontSize(){
-        window.optionBar.restoreFontSize();
+        window.option.restoreFontSize();
     }
 
 
@@ -116,7 +139,12 @@ public class UIController {
     Setter
      */
     public void setLayer(LayerController layer){
-        this.window.canvas.setLayer(layer);
+        window.canvas.setLayer(layer);
+        window.info.updateCanvasSize(layer.getSize());
+    }
+
+    public void setInfoText(String text){
+        window.info.setText(text);
     }
 
 
