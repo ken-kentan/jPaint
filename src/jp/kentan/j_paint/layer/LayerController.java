@@ -84,6 +84,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
         repaint();
 
+        controller.updateWindowTitle();
         System.out.println("Layer(" + currentLayerIndex + ") hide.");
     }
 
@@ -94,6 +95,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
         repaint();
 
+        controller.updateWindowTitle();
         System.out.println("Layer(" + currentLayerIndex + ") show.");
     }
 
@@ -126,6 +128,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         layerList.add(layer);
         layer = new Layer(this.tool, sizeCanvas);
 
+        controller.updateWindowTitle();
         controller.updateCommandButtonStatus();
     }
 
@@ -180,8 +183,6 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         }
 
         g.drawImage(layer, 0, 0, layer.getWidth(), layer.getHeight(), this);
-
-        controller.updateWindowTitle();
     }
 
     public void mousePressed(MouseEvent e) {

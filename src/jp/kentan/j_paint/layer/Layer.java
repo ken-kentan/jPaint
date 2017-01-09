@@ -24,7 +24,8 @@ class Layer extends BufferedImage {
         g = this.createGraphics();
         g.setColor(Color.BLACK);
         g.setBackground(ALPHA);
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
         System.out.println("Layer create.(" + size.width + " * " + size.height + ")");
     }
@@ -65,7 +66,7 @@ class Layer extends BufferedImage {
         int width = Math.abs(p1.x - p2.x);
         int height = Math.abs(p1.y - p2.y);
 
-        g.setColor(tool.getColor());
+        g.setPaint(tool.getColor());
         g.setStroke(tool.getStroke());
 
         switch (tool.getType()){
