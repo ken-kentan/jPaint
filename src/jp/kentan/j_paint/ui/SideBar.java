@@ -1,6 +1,6 @@
 package jp.kentan.j_paint.ui;
 
-import jp.kentan.j_paint.resource.R;
+import jp.kentan.j_paint.resources.R;
 import jp.kentan.j_paint.tool.Tool;
 import jp.kentan.j_paint.ui.component.CommandButton;
 import jp.kentan.j_paint.ui.component.ToolButton;

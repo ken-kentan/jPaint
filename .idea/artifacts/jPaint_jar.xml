@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="jPaint:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/jPaint_jar</output-path>
+    <root id="archive" name="jPaint.jar">
+      <element id="module-output" name="jPaint" />
+    </root>
+  </artifact>
+</component>

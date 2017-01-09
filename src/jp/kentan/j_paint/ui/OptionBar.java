@@ -1,6 +1,6 @@
 package jp.kentan.j_paint.ui;
 
-import jp.kentan.j_paint.resource.R;
+import jp.kentan.j_paint.resources.R;
 import jp.kentan.j_paint.ui.component.BrushRadioButton;
 import jp.kentan.j_paint.ui.component.FontsComboBox;
 import jp.kentan.j_paint.ui.component.CornerRadioButton;
