@@ -65,6 +65,16 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         System.out.println("LayerController create.");
     }
 
+    @Override
+    protected void finalize() throws Throwable{
+        try {
+            super.finalize();
+        } finally {
+            layerList.clear();
+            System.out.println("LayerController destroyed.");
+        }
+    }
+
     public void clear(){
         int size = layerList.size();
 
@@ -74,7 +84,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
         repaint();
 
-        System.out.println("All Layer(" + size + ") removed.");
+        System.out.println("All Layer(" + size + ") flushed.");
     }
 
     public void undo(){

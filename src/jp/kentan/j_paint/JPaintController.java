@@ -98,10 +98,12 @@ public class JPaintController {
         }
 
         path = null;
-        updateWindowTitle();
 
+        layer = null;
         ui.setLayer(this.layer = new LayerController(this, this.tool, size));
         ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
+
+        updateWindowTitle();
     }
 
     public void createNewCanvasFromImage(File file){
@@ -116,10 +118,12 @@ public class JPaintController {
         }
 
         path = file;
-        updateWindowTitle();
 
+        layer = null;
         ui.setLayer(this.layer = new LayerController(this, this.tool, image));
         ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
+
+        updateWindowTitle();
     }
 
     public boolean saveCanvas(File file){

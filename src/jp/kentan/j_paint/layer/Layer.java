@@ -45,6 +45,17 @@ class Layer extends BufferedImage {
         System.out.println("Layer create.(" + image + ")");
     }
 
+    @Override
+    protected void finalize() throws Throwable{
+        try {
+            super.finalize();
+        } finally {
+            this.flush();
+            g.dispose();
+            System.out.println("Layer destroyed.");
+        }
+    }
+
     void setHide(boolean isHide){
         this.isHide = isHide;
     }

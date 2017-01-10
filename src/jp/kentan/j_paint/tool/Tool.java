@@ -1,6 +1,8 @@
 package jp.kentan.j_paint.tool;
 
 
+import jp.kentan.j_paint.ui.component.FontsComboBox;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,7 +16,7 @@ public class Tool {
     Color colorDash = Color.BLACK;
     Stroke stroke = new BasicStroke();
     Stroke strokeDash = new BasicStroke();
-    Font font = new JLabel().getFont();
+    Font font = FontsComboBox.getDefaultFont();
     String text = "Text";
     boolean isShape = true;
     boolean isCircle = true; //Brush, Eraser

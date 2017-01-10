@@ -2,13 +2,13 @@ package jp.kentan.j_paint.ui.component;
 
 import java.awt.*;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 /*
 http://www.java2s.com/Code/Java/2D-Graphics-GUI/Listallavailablefontsinthesystem.htm
  */
 public class FontsComboBox extends JComboBox<String> {
-    private Font[] fonts;
+    private Font[] fonts = null;
 
     public FontsComboBox() {
         GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -24,5 +24,10 @@ public class FontsComboBox extends JComboBox<String> {
         int index = this.getSelectedIndex();
 
         return fonts[index];
+    }
+
+    public static Font getDefaultFont(){
+        GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        return gEnv.getAllFonts()[0];
     }
 }
