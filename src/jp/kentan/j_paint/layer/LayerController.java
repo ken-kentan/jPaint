@@ -71,7 +71,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
             super.finalize();
         } finally {
             layerList.clear();
-            System.out.println("LayerController destroyed.");
+            System.out.println("GC LayerController destroyed.");
         }
     }
 

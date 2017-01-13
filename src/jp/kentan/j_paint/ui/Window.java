@@ -6,13 +6,13 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 
-class Window extends JFrame implements WindowListener {
+class Window extends JFrame {
     Canvas canvas;
     OptionBar option;
     InfoBar info;
 
     Window(UIController controller, UIEventListener listener){
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(1280, 720);
         this.setLocationRelativeTo(null);
         this.setTitle("jPaint");
@@ -28,30 +28,5 @@ class Window extends JFrame implements WindowListener {
         this.add(canvas = new Canvas(), BorderLayout.CENTER);
 
         this.addWindowListener(listener);
-    }
-
-
-    /*
-    Windowイベント
-     */
-    public void windowOpened(WindowEvent e){
-    }
-
-    public void windowClosing(WindowEvent e){
-    }
-
-    public void windowClosed(WindowEvent e){
-    }
-
-    public void windowIconified(WindowEvent e){
-    }
-
-    public void windowDeiconified(WindowEvent e){
-    }
-
-    public void windowActivated(WindowEvent e){
-    }
-
-    public void windowDeactivated(WindowEvent e){
     }
 }

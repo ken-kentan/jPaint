@@ -46,6 +46,7 @@ class SideBar extends JPanel {
         btnRedo.setPreferredSize(BUTTON_SIZE);
 
         JPanel btnColor = new JPanel();
+        btnColor.setName("Color");
         btnColor.setBackground(Color.BLACK);
         btnColor.setPreferredSize(new Dimension(0, 30));
 

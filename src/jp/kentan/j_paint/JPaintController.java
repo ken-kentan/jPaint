@@ -12,6 +12,7 @@ import jp.kentan.j_paint.ui.component.CornerRadioButton;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -158,6 +159,7 @@ public class JPaintController {
         if (option == JOptionPane.YES_OPTION){
             layer.clear();
 
+            updateWindowTitle();
             updateCommandButtonStatus();
         }
     }
@@ -274,7 +276,11 @@ public class JPaintController {
     }
 
     public void updateInfoPointLabel(Point p){
-        String point = " x=" + p.x + ", y=" + p.y;
-        ui.setInfoText(point);
+        StringBuilder builder = new StringBuilder(" x=");
+        builder.append(p.x);
+        builder.append(", y=");
+        builder.append(p.y);
+
+        ui.setInfoText(builder.toString());
     }
 }

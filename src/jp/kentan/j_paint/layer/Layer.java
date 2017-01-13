@@ -52,7 +52,7 @@ class Layer extends BufferedImage {
         } finally {
             this.flush();
             g.dispose();
-            System.out.println("Layer destroyed.");
+            System.out.println("GC Layer destroyed.");
         }
     }
 
