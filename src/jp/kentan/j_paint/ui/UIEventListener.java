@@ -199,10 +199,7 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
             JPanel panel = (JPanel)obj;
             Color color = Dialog.showColorChooser(panel.getBackground());
 
-            if(color != null){
-                panel.setBackground(color);
-                controller.setLayerToolColor(color);
-            }
+            if(color != null) controller.setLayerToolColor(color);
         }
     }
 

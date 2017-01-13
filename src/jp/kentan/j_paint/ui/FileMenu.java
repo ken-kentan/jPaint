@@ -48,7 +48,7 @@ public class FileMenu extends JMenu {
     }
 
     public static String getSuffix(String fileName) {
-        if (fileName == null) return null;
+        if (fileName == null) return "";
 
         int point = fileName.lastIndexOf(".");
 
@@ -56,6 +56,6 @@ public class FileMenu extends JMenu {
             return fileName.substring(point + 1);
         }
 
-        return null;
+        return "";
     }
 }

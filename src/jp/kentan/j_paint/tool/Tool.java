@@ -4,10 +4,11 @@ package jp.kentan.j_paint.tool;
 import jp.kentan.j_paint.ui.component.FontsComboBox;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Tool {
     public enum TYPE{
-        LINE, RECT, OVAL, TEXT, PEN, BRUSH, ERASER
+        LINE, RECT, OVAL, TEXT, PEN, BRUSH, DROPPER,  ERASER
     }
 
     private TYPE type;
@@ -17,6 +18,7 @@ public class Tool {
     Stroke strokeDash = new BasicStroke();
     Font font = FontsComboBox.getDefaultFont();
     String text = "Text";
+    BufferedImage image;
     boolean isShape = true;
     boolean isCircle = true; //Brush, Eraser
     boolean isStamp = true;

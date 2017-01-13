@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 class Layer extends BufferedImage {
     private static final Color ALPHA = new Color(0, 0, 0, 0);
 
+    private final LayerController controller;
     private final ToolController tool;
 
     private Graphics2D g;
@@ -16,9 +17,10 @@ class Layer extends BufferedImage {
     private boolean isHide = false;
     private boolean isDragged = false;
 
-    Layer(ToolController tool, Dimension size){
+    Layer(LayerController controller, ToolController tool, Dimension size){
         super(size.width, size.height, BufferedImage.TYPE_4BYTE_ABGR);
 
+        this.controller = controller;
         this.tool = tool;
 
         g = this.createGraphics();
@@ -30,9 +32,10 @@ class Layer extends BufferedImage {
         System.out.println("Layer create.(" + size.width + " * " + size.height + ")");
     }
 
-    Layer(ToolController tool, BufferedImage image){
+    Layer(LayerController controller, ToolController tool, BufferedImage image){
         super(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 
+        this.controller = controller;
         this.tool = tool;
 
         g = this.createGraphics();
@@ -128,10 +131,23 @@ class Layer extends BufferedImage {
 
                 p1 = p2;
                 break;
+            case DROPPER:
+                g.clearRect(0, 0, this.getWidth(), this.getHeight());
+                g.setColor(Color.BLACK);
+                g.setStroke(tool.getDashStroke());
+                g.drawRect(p.x, p.y, 100, 50);
+
+                Color color = tool.getPixelColor(p);
+                g.setColor(color);
+                g.setStroke(tool.getStroke());
+                g.fillRect(p.x+1, p.y+1, 99, 49);
+
+                controller.setDrawColor(color);
+                break;
         }
     }
 
-    void released(Point p){
+    boolean released(Point p){
         this.p2 = p;
 
         int x = Math.min(p1.x, p2.x);
@@ -153,7 +169,6 @@ class Layer extends BufferedImage {
                 break;
             case OVAL:
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
-                g.clearRect(0, 0, this.getWidth(), this.getHeight());
                 g.drawOval(x, y, width, height);
                 break;
             case PEN:
@@ -162,7 +177,22 @@ class Layer extends BufferedImage {
                 g.setStroke(tool.getStroke());
                 g.drawLine(p1.x, p1.y, p2.x, p2.y);
                 break;
+            case DROPPER:
+                g.clearRect(0, 0, this.getWidth(), this.getHeight());
+                g.setColor(Color.BLACK);
+                g.setStroke(tool.getDashStroke());
+                g.drawRect(p.x, p.y, 100, 50);
+
+                Color color = tool.getPixelColor(p);
+                g.setColor(color);
+                g.setStroke(tool.getStroke());
+                g.fillRect(p.x+1, p.y+1, 99, 49);
+
+                controller.setDrawColor(color);
+                return false;
         }
+
+        return true;
     }
 
     void moved(Point p){
@@ -183,15 +213,25 @@ class Layer extends BufferedImage {
 
                 p1 = p;
                 break;
+            case DROPPER:
+                g.clearRect(0, 0, this.getWidth(), this.getHeight());
+                g.setColor(Color.BLACK);
+                g.setStroke(tool.getDashStroke());
+                g.drawRect(p.x, p.y, 100, 50);
+
+                g.setColor(tool.getPixelColor(p));
+                g.setStroke(tool.getStroke());
+                g.fillRect(p.x+1, p.y+1, 99, 49);
+                break;
         }
     }
 
     void exited(){
-        if(isDragged) return;
-
         switch (tool.getType()){
             case BRUSH:
             case TEXT:
+                if(isDragged) return;
+            case DROPPER:
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
                 break;
         }

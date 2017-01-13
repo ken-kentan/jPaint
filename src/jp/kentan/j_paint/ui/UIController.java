@@ -144,6 +144,10 @@ public class UIController {
         window.info.setText(text);
     }
 
+    public void setColorPanel(Color color){
+        window.sideBar.setColorPanel(color);
+    }
+
 
     /*
     Getter

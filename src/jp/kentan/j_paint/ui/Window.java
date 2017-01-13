@@ -6,6 +6,7 @@ import java.awt.*;
 class Window extends JFrame {
     Canvas canvas;
     OptionBar option;
+    SideBar sideBar;
     InfoBar info;
 
     Window(UIController controller, UIEventListener listener){
@@ -19,7 +20,7 @@ class Window extends JFrame {
         this.setJMenuBar(new MenuBar(controller, listener));
 
         this.add(option = new OptionBar(listener), BorderLayout.NORTH);
-        this.add(new SideBar(controller, listener), BorderLayout.WEST);
+        this.add(sideBar = new SideBar(controller, listener), BorderLayout.WEST);
         this.add(info = new InfoBar(), BorderLayout.SOUTH);
 
         this.add(canvas = new Canvas(), BorderLayout.CENTER);

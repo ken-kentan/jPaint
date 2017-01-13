@@ -4,20 +4,22 @@ import jp.kentan.j_paint.ui.component.BrushRadioButton;
 import jp.kentan.j_paint.ui.component.CornerRadioButton;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 
 public class ToolController {
     private Tool tool;
-    private Tool line, rect, oval, text, pen, brush, eraser;
+    private Tool line, rect, oval, text, pen, brush, dropper,  eraser;
 
     public ToolController(){
-        line   = new Tool(Tool.TYPE.LINE);
-        rect   = new Tool(Tool.TYPE.RECT);
-        oval   = new Tool(Tool.TYPE.OVAL);
-        text   = new Tool(Tool.TYPE.TEXT);
-        pen    = new Tool(Tool.TYPE.PEN);
-        brush  = new Tool(Tool.TYPE.BRUSH);
-        eraser = new Tool(Tool.TYPE.ERASER);
+        line    = new Tool(Tool.TYPE.LINE);
+        rect    = new Tool(Tool.TYPE.RECT);
+        oval    = new Tool(Tool.TYPE.OVAL);
+        text    = new Tool(Tool.TYPE.TEXT);
+        pen     = new Tool(Tool.TYPE.PEN);
+        brush   = new Tool(Tool.TYPE.BRUSH);
+        dropper = new Tool(Tool.TYPE.DROPPER);
+        eraser  = new Tool(Tool.TYPE.ERASER);
 
         //初期値
         text.size = 50;
@@ -43,6 +45,9 @@ public class ToolController {
                 break;
             case BRUSH:
                 tool = brush;
+                break;
+            case DROPPER:
+                tool = dropper;
                 break;
             case ERASER:
                 tool = eraser;
@@ -155,6 +160,10 @@ public class ToolController {
         System.out.println("Tool stamp(" + !isBrush + ") set.");
     }
 
+    public void setMergedImage(BufferedImage image){
+        dropper.image = image;
+    }
+
     /*
     Getter
      */
@@ -208,6 +217,16 @@ public class ToolController {
         }else{
             return BrushRadioButton.TYPE.SQUARE;
         }
+    }
+
+    public Color getPixelColor(Point p){
+        if(p.x < 0 || p.y < 0 || p.x > tool.image.getWidth() || p.y > tool.image.getHeight()) return Color.GRAY;
+
+        int color = tool.image.getRGB(p.x, p.y);
+
+        tool.color = new Color( (color & 0x00ff0000) >> 16, (color & 0x0000ff00) >> 8, color & 0x000000ff, (color>>24) & 0xff);
+
+        return tool.color;
     }
 
     public boolean isStamp(){

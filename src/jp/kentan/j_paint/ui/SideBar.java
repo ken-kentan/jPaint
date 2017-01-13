@@ -12,6 +12,8 @@ import java.awt.*;
 class SideBar extends JPanel {
     private static final Dimension BUTTON_SIZE = new Dimension(40, 40);
 
+    private JPanel panelColor;
+
     SideBar(UIController controller, UIEventListener listener){
         this.setLayout(new FlowLayout());
         this.setPreferredSize(new Dimension(100, 500));
@@ -29,6 +31,7 @@ class SideBar extends JPanel {
         ToolButton btnTextTool = new ToolButton(R.TEXT, Tool.TYPE.TEXT);
         ToolButton btnPenTool  = new ToolButton(R.PEN, Tool.TYPE.PEN);
         ToolButton btnBrushTool = new ToolButton(R.BRUSH, Tool.TYPE.BRUSH);
+        ToolButton btnDropperTool = new ToolButton(R.DROPPER, Tool.TYPE.DROPPER);
         ToolButton btnEraserTool = new ToolButton(R.ERASER, Tool.TYPE.ERASER);
 
         CommandButton btnUndo  = new CommandButton(R.UNDO, CommandButton.CMD.UNDO);
@@ -39,16 +42,17 @@ class SideBar extends JPanel {
         btnOvalTool.setPreferredSize(BUTTON_SIZE);
         btnTextTool.setPreferredSize(BUTTON_SIZE);
         btnPenTool.setPreferredSize(BUTTON_SIZE);
+        btnDropperTool.setPreferredSize(BUTTON_SIZE);
         btnBrushTool.setPreferredSize(BUTTON_SIZE);
         btnEraserTool.setPreferredSize(BUTTON_SIZE);
 
         btnUndo.setPreferredSize(BUTTON_SIZE);
         btnRedo.setPreferredSize(BUTTON_SIZE);
 
-        JPanel btnColor = new JPanel();
-        btnColor.setName("Color");
-        btnColor.setBackground(Color.BLACK);
-        btnColor.setPreferredSize(new Dimension(0, 30));
+        panelColor = new JPanel();
+        panelColor.setName("Color");
+        panelColor.setBackground(Color.BLACK);
+        panelColor.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -76,6 +80,10 @@ class SideBar extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
+        panelTools.add(btnDropperTool, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
         panelTools.add(btnEraserTool, gbc);
 
         gbc.gridx = 0;
@@ -91,7 +99,7 @@ class SideBar extends JPanel {
         gbc.gridy = 5;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 0, 0, 0);
-        panelTools.add(btnColor, gbc);
+        panelTools.add(panelColor, gbc);
 
         controller.add(btnLineTool);
         controller.add(btnRectTool);
@@ -99,6 +107,7 @@ class SideBar extends JPanel {
         controller.add(btnTextTool);
         controller.add(btnPenTool);
         controller.add(btnBrushTool);
+        controller.add(btnDropperTool);
         controller.add(btnEraserTool);
 
         controller.add(btnUndo);
@@ -110,13 +119,18 @@ class SideBar extends JPanel {
         btnTextTool.addActionListener(listener);
         btnPenTool.addActionListener(listener);
         btnBrushTool.addActionListener(listener);
+        btnDropperTool.addActionListener(listener);
         btnEraserTool.addActionListener(listener);
 
         btnUndo.addActionListener(listener);
         btnRedo.addActionListener(listener);
 
-        btnColor.addMouseListener(listener);
+        panelColor.addMouseListener(listener);
 
         this.add(panelTools);
+    }
+
+    public void setColorPanel(Color color){
+        panelColor.setBackground(color);
     }
 }

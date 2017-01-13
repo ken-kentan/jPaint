@@ -10,6 +10,7 @@ public class R {
     public static final ImageIcon TEXT  = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/TEXT.png"));
     public static final ImageIcon PEN   = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/PEN.png"));
     public static final ImageIcon BRUSH = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/BRUSH.png"));
+    public static final ImageIcon DROPPER = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/DROPPER.png"));
     public static final ImageIcon ERASER = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/ERASER.png"));
 
     public static final ImageIcon UNDO = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/UNDO.png"));

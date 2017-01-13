@@ -33,7 +33,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         this.setMinimumSize(sizeCanvas);
         this.setBackground(Color.WHITE); //背景色
 
-        layer = new Layer(this.tool, sizeCanvas);
+        layer = new Layer(this, this.tool, sizeCanvas);
 
         this.sizeCanvas = sizeCanvas;
 
@@ -53,9 +53,9 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         this.setMinimumSize(sizeCanvas);
         this.setBackground(Color.WHITE); //背景色
 
-        background = new Layer(this.tool, image);
+        background = new Layer(this, this.tool, image);
 
-        layer = new Layer(this.tool, sizeCanvas);
+        layer = new Layer(this, this.tool, sizeCanvas);
 
         this.sizeCanvas = sizeCanvas;
 
@@ -136,7 +136,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         }
 
         layerList.add(layer);
-        layer = new Layer(this.tool, sizeCanvas);
+        layer = new Layer(this, tool, sizeCanvas);
 
         controller.updateWindowTitle();
         controller.updateCommandButtonStatus();
@@ -144,6 +144,12 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
     public BufferedImage merge(String suffix){
         BufferedImage image;
+
+        if(suffix == null){
+            suffix = "png";
+        }else{
+            saveLayerIndex = currentLayerIndex;
+        }
 
         if(isSupportAlpha(suffix)){
             image = new BufferedImage(sizeCanvas.width, sizeCanvas.height, BufferedImage.TYPE_4BYTE_ABGR);
@@ -164,8 +170,6 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
             g.drawImage(layer, 0, 0, layer.getWidth(), layer.getHeight(), this);
         }
 
-        saveLayerIndex = currentLayerIndex;
-
         System.out.println("image merged.(" + layerList.size() + " layers)");
 
         return image;
@@ -174,6 +178,10 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     public void updateInputText(){
         layer.moved(null);
         repaint();
+    }
+
+    void setDrawColor(Color color){
+        controller.setLayerToolColor(color);
     }
 
     private boolean isRightButton(MouseEvent e){
@@ -206,9 +214,9 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     public void mouseReleased(MouseEvent e) {
         if(isRightButton(e)) return;
 
-        layer.released(e.getPoint());
-
-        createNewLayer();
+        if(layer.released(e.getPoint())){
+            createNewLayer();
+        }
 
         repaint();
     }

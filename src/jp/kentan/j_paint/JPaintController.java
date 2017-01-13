@@ -103,6 +103,8 @@ public class JPaintController {
         ui.setLayer(this.layer = new LayerController(this, this.tool, size));
         ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
 
+        setLayerTool(Tool.TYPE.LINE);
+
         updateWindowTitle();
     }
 
@@ -123,10 +125,13 @@ public class JPaintController {
         ui.setLayer(this.layer = new LayerController(this, this.tool, image));
         ui.updateCommandStatus(layer.canUndo(), layer.canRedo());
 
+        setLayerTool(Tool.TYPE.LINE);
+
         updateWindowTitle();
     }
 
     public boolean saveCanvas(File file){
+        boolean isWrite = false;
         BufferedImage image;
 
         if(file == null){
@@ -139,10 +144,15 @@ public class JPaintController {
 
         try{
             image = layer.merge(suffix);
-            ImageIO.write(image, suffix, file);
+            isWrite = ImageIO.write(image, suffix, file);
         }catch (Exception e){
             System.out.println(e.getMessage());
             Dialog.showWarningMsg("保存に失敗しました。\nエラー詳細: " + e.getMessage());
+            return false;
+        }
+
+        if(!isWrite){
+            Dialog.showWarningMsg("保存に失敗しました。");
             return false;
         }
 
@@ -178,6 +188,8 @@ public class JPaintController {
     }
 
     public void setLayerTool(Tool.TYPE type){
+        if(type == Tool.TYPE.DROPPER) tool.setMergedImage(layer.merge(null));
+
         tool.set(type);
         ui.updateOptionBar(tool.getType(), tool.getSize(), tool.getCornerType(), tool.getBrushType());
         ui.updateToolStatus(type);
@@ -222,6 +234,7 @@ public class JPaintController {
 
     public void setLayerToolColor(Color color){
         tool.set(color);
+        ui.setColorPanel(color);
     }
 
     public void setLayerToolCornerType(CornerRadioButton.TYPE type){
