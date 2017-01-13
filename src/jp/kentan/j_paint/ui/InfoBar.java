@@ -5,7 +5,7 @@ import java.awt.*;
 
 
 class InfoBar extends JPanel {
-    private JLabel labelInfo,labelCanvasSize;
+    private JLabel labelInfo, labelCanvasSize;
 
     InfoBar(){
         this.setLayout(new BorderLayout());

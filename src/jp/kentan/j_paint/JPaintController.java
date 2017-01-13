@@ -12,15 +12,14 @@ import jp.kentan.j_paint.ui.component.CornerRadioButton;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 
 public class JPaintController {
     private UIController ui;
-    private LayerController layer;
     private ToolController tool;
+    private LayerController layer;
 
     private File path = null;
 
@@ -253,7 +252,7 @@ public class JPaintController {
     }
 
     //Canvasが消える場合に保存確認
-    public boolean checkCanvasSaved(){
+    public boolean isSavedCanvas(){
         if(!layer.isSaved()){
             switch (Dialog.showConfirmMsg("変更を保存しますか？", JOptionPane.YES_NO_CANCEL_OPTION)) {
                 case JOptionPane.YES_OPTION:
@@ -263,24 +262,19 @@ public class JPaintController {
                         File file = Dialog.showSaveFileChooser();
 
                         if(file != null && saveCanvas(file)) break;
-                        else return false;
+                        else return true;
                     }
                 case JOptionPane.NO_OPTION:
                     break;
                 case JOptionPane.CANCEL_OPTION:
-                    return false;
+                    return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     public void updateInfoPointLabel(Point p){
-        StringBuilder builder = new StringBuilder(" x=");
-        builder.append(p.x);
-        builder.append(", y=");
-        builder.append(p.y);
-
-        ui.setInfoText(builder.toString());
+        ui.setInfoText(" x=" + p.x + ", y=" +  p.y);
     }
 }

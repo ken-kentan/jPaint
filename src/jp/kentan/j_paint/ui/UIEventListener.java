@@ -15,12 +15,10 @@ import java.io.File;
 
 
 class UIEventListener implements ActionListener, ChangeListener, MouseListener, ItemListener, DocumentListener, WindowListener {
-    private UIController ui;
     private JPaintController controller;
 
-    UIEventListener(JPaintController controller, UIController ui){
+    UIEventListener(JPaintController controller){
         this.controller = controller;
-        this.ui = ui;
 
         System.out.println("UIEventListener create.");
     }
@@ -62,19 +60,19 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
                 controller.setLayerToolTextBrush(checkBox.isSelected());
             }
         }else if(obj instanceof JMenuItem){
-            File file = null;
+            File file;
             JMenuItem item = (JMenuItem)obj;
 
             switch (item.getActionCommand()){
                 case "New":
-                    if(!controller.checkCanvasSaved()) return;
+                    if(controller.isSavedCanvas()) return;
 
                     String[] strSize = Dialog.showNewCanvasDialog();
 
                     if(strSize != null) controller.createNewCanvas(strSize);
                     break;
                 case "Open":
-                    if(!controller.checkCanvasSaved()) return;
+                    if(controller.isSavedCanvas()) return;
 
                     file = Dialog.showImageFileChooser();
 

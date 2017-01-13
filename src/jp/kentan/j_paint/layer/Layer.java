@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 class Layer extends BufferedImage {
     private static final Color ALPHA = new Color(0, 0, 0, 0);
 
-    private ToolController tool;
+    private final ToolController tool;
 
     private Graphics2D g;
     private Point p1, p2;

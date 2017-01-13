@@ -8,7 +8,7 @@ public class CornerRadioButton extends JRadioButton {
         SHARP, ROUND
     }
 
-    private TYPE type;
+    private final TYPE type;
 
     public CornerRadioButton(TYPE type){
         this.type = type;

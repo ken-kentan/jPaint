@@ -5,9 +5,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 
-/**
- * Created by kentaro on 2017/01/07.
- */
+
 public class Dialog {
     private static Window window;
 
@@ -34,11 +32,11 @@ public class Dialog {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    public static Color showColorChooser(Color color){
+    static Color showColorChooser(Color color){
         return JColorChooser.showDialog(window, "カラーピッカー(描画色)", color);
     }
 
-    public static String[] showNewCanvasDialog() {
+    static String[] showNewCanvasDialog() {
         String titleBtn[] = {"作成", "キャンセル"};
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -72,7 +70,7 @@ public class Dialog {
         }
     }
 
-    public static File showImageFileChooser(){
+    static File showImageFileChooser(){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("開く");
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("すべての画像形式(*.JPG;*.JPEG;*.PNG)", "jpg", "jpeg", "png"));

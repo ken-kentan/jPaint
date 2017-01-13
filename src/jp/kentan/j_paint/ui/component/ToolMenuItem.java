@@ -4,11 +4,9 @@ import jp.kentan.j_paint.tool.Tool;
 
 import javax.swing.*;
 
-/**
- * Created by kentaro on 2017/01/07.
- */
+
 public class ToolMenuItem extends JMenuItem {
-    private Tool.TYPE type;
+    private final Tool.TYPE type;
 
     public ToolMenuItem(String name, Tool.TYPE type){
         super(name);

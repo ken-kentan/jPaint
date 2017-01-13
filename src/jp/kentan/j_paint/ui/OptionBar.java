@@ -16,10 +16,10 @@ class OptionBar extends JPanel {
     private CornerRadioButton radioSharp, radioRound;
     private BrushRadioButton radioCircle, radioSquare;
     private JPanel panelSize, panelStyle, panelText, panelStyleBrush;
-    private String prevFontSize = "50 px", prevInputText = "Text";
+    private String prevFontSize = "50 px";
 
     JLabel title;
-    JTextField sizeTextField, inputTextField;
+    JTextField sizeTextField;
     JSlider sizeSlider;
 
     static final String[] toolName = new String[]{"直線", "長方形", "楕円形", "テキスト", "ペン", "ブラシ", "消しゴム"};
@@ -104,7 +104,7 @@ class OptionBar extends JPanel {
 
         fontSizeBox.setSelectedItem(prevFontSize);
 
-        inputTextField = new JTextField(prevInputText);
+        JTextField inputTextField = new JTextField("Text");
         inputTextField.setName("InputText");
         inputTextField.setBorder(null);
         inputTextField.setPreferredSize(new Dimension(200, 20));

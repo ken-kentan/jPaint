@@ -8,7 +8,7 @@ public class BrushRadioButton extends JRadioButton {
         CIRCLE, SQUARE
     }
 
-    private TYPE type;
+    private final TYPE type;
 
     public BrushRadioButton(TYPE type){
         this.type = type;

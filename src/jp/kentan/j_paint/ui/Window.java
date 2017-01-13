@@ -2,9 +2,6 @@ package jp.kentan.j_paint.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
 
 class Window extends JFrame {
     Canvas canvas;

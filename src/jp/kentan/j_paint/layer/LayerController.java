@@ -176,8 +176,8 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         repaint();
     }
 
-    private boolean isLeftButton(MouseEvent e){
-        return (e.getButton() == MouseEvent.BUTTON1 || (e.getModifiersEx() & (MouseEvent.BUTTON1_DOWN_MASK | MouseEvent.BUTTON2_DOWN_MASK)) == MouseEvent.BUTTON1_DOWN_MASK);
+    private boolean isRightButton(MouseEvent e){
+        return !(e.getButton() == MouseEvent.BUTTON1 || (e.getModifiersEx() & (MouseEvent.BUTTON1_DOWN_MASK | MouseEvent.BUTTON2_DOWN_MASK)) == MouseEvent.BUTTON1_DOWN_MASK);
     }
 
 
@@ -196,7 +196,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     }
 
     public void mousePressed(MouseEvent e) {
-        if(!isLeftButton(e)) return;
+        if(isRightButton(e)) return;
 
         layer.pressed(e.getPoint());
 
@@ -204,7 +204,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     }
 
     public void mouseReleased(MouseEvent e) {
-        if(!isLeftButton(e)) return;
+        if(isRightButton(e)) return;
 
         layer.released(e.getPoint());
 
@@ -225,7 +225,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     }
 
     public void mouseDragged(MouseEvent e){
-        if (!isLeftButton(e)) return;
+        if (isRightButton(e)) return;
 
         layer.dragged(e.getPoint());
         controller.updateInfoPointLabel(e.getPoint());

@@ -1,6 +1,5 @@
 package jp.kentan.j_paint.ui;
 
-import jp.kentan.j_paint.JPaintController;
 import jp.kentan.j_paint.tool.Tool;
 import jp.kentan.j_paint.ui.component.CommandMenuItem;
 import jp.kentan.j_paint.ui.component.ToolMenuItem;
@@ -10,19 +9,13 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 
-public class EditMenu extends JMenu {
-
-    private ToolMenuItem itemCircleBrush, itemSquareBrush;
-    private ToolMenuItem itemCircleEraser, itemSquareEraser, itemClearAll;
-    private ToolMenuItem itemUndo, itemRedo;
+class EditMenu extends JMenu {
 
     EditMenu(UIController controller, UIEventListener listener){
         super("編集");
 
         //親メニュー
         JMenu menuTool = new JMenu("ツール");
-        JMenu menuBrush = new JMenu("Brush");
-        JMenu menuEraser = new JMenu("Eraser");
 
         ToolMenuItem itemLineTool, itemRectTool, itemOvalTool, itemTextTool, itemPenTool, itemBrushTool, itemEraserTool;
 

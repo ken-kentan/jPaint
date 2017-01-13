@@ -3,7 +3,6 @@ package jp.kentan.j_paint.tool;
 
 import jp.kentan.j_paint.ui.component.FontsComboBox;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class Tool {

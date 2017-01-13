@@ -11,7 +11,6 @@ import java.util.List;
 
 
 public class UIController {
-    private JPaintController controller;
     private Window window;
 
     private Dimension sizeCanvas = new Dimension(500, 500);
@@ -23,17 +22,15 @@ public class UIController {
 
 
     public UIController(JPaintController controller){
-        this.controller = controller;
-
-        UIEventListener listener = new UIEventListener(controller, this);
+        UIEventListener listener = new UIEventListener(controller);
 
         this.window = new Window(this, listener);
 
         new Dialog(this.window);
     }
 
-    public void setVisible(boolean visible){
-        window.setVisible(visible);
+    public void setVisible(boolean isVisible){
+        window.setVisible(isVisible);
     }
 
     public void setTitle(String title){

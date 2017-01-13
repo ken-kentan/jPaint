@@ -5,9 +5,7 @@ import jp.kentan.j_paint.ui.component.CornerRadioButton;
 
 import java.awt.*;
 
-/**
- * Created by kentaro on 2017/01/07.
- */
+
 public class ToolController {
     private Tool tool;
     private Tool line, rect, oval, text, pen, brush, eraser;
@@ -185,8 +183,7 @@ public class ToolController {
     }
 
     public Font getFont(){
-        Font font = new Font(tool.font.getName(), Font.PLAIN, tool.size);
-        return font;
+        return new Font(tool.font.getName(), Font.PLAIN, tool.size);
     }
 
     public String getText(){
