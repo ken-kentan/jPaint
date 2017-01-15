@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 /*
-http://www.java2s.com/Code/Java/2D-Graphics-GUI/Listallavailablefontsinthesystem.htm
+参考 http://www.java2s.com/Code/Java/2D-Graphics-GUI/Listallavailablefontsinthesystem.htm
  */
 public class FontsComboBox extends JComboBox<String> {
     private Font[] fonts = null;

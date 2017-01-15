@@ -47,7 +47,7 @@ public class JPaintController {
                 case JOptionPane.YES_OPTION:
                     if(path != null && saveCanvas(null)){
                         break;
-                    }else{ //untitled
+                    }else{ //untitledの場合
                         File file = Dialog.showSaveFileChooser();
 
                         if(file != null && saveCanvas(file)) break;
@@ -131,7 +131,7 @@ public class JPaintController {
     }
 
     public boolean saveCanvas(File file){
-        boolean isWrite = false;
+        boolean isWrite;
         BufferedImage image;
 
         if(file == null){
@@ -191,7 +191,7 @@ public class JPaintController {
         if(type == Tool.TYPE.DROPPER) tool.setMergedImage(layer.merge(null));
 
         tool.set(type);
-        ui.updateOptionBar(tool.getType(), tool.getSize(), tool.getCornerType(), tool.getBrushType());
+        ui.updateOptionBar(tool.getType(), tool.getSize(), tool.getCornerType(), tool.getBrushType(), tool.isFill());
         ui.updateToolStatus(type);
     }
 
@@ -258,6 +258,10 @@ public class JPaintController {
 
         tool.set(text);
         layer.updateInputText();
+    }
+
+    public void setLayerToolFill(boolean isFill){
+        tool.setFill(isFill);
     }
 
     public void setLayerToolTextBrush(boolean isBrush){

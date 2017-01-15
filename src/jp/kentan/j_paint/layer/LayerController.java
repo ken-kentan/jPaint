@@ -15,6 +15,7 @@ import java.util.List;
 
 public class LayerController extends JPanel implements MouseListener, MouseMotionListener {
     private static final String[] SUFFIX_ALPHA_SUPPORT = new String[]{"png", "gif", "PNG", "GIF"};
+
     private JPaintController controller;
     private ToolController tool;
 
@@ -84,7 +85,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
         repaint();
 
-        System.out.println("All Layer(" + size + ") flushed.");
+        System.out.println("All Layer(" + size + ") clear.");
     }
 
     public void undo(){
@@ -175,6 +176,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         return image;
     }
 
+    //静止状態でテキストが更新された際に強制的に再描写
     public void updateInputText(){
         layer.moved(null);
         repaint();
@@ -250,9 +252,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
 
     private boolean isSupportAlpha(String suffix){
         for(String suffixAlpha : SUFFIX_ALPHA_SUPPORT){
-            if(suffix.equals(suffixAlpha)){
-                return true;
-            }
+            if(suffix.equals(suffixAlpha)) return true;
         }
 
         return false;

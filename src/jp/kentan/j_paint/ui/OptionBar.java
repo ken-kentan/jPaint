@@ -15,7 +15,8 @@ class OptionBar extends JPanel {
     private JComboBox<String> fontSizeBox;
     private CornerRadioButton radioSharp, radioRound;
     private BrushRadioButton radioCircle, radioSquare;
-    private JPanel panelSize, panelStyle, panelText, panelStyleBrush;
+    private JPanel panelSize, panelStyle, panelFill, panelText, panelStyleBrush;
+    private JCheckBox fillCheckBox;
     private String prevFontSize = "50 px";
 
     JLabel title;
@@ -85,6 +86,23 @@ class OptionBar extends JPanel {
         // end
 
         /*
+        塗りつぶしパネル
+         */
+        panelFill = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panelFill.setPreferredSize(new Dimension(180, 20));
+        panelFill.setBackground(Color.LIGHT_GRAY);
+
+        fillCheckBox = new JCheckBox("塗りつぶし");
+        fillCheckBox.setName("FillOption");
+        fillCheckBox.setActionCommand("FillOption");
+        fillCheckBox.setBackground(Color.LIGHT_GRAY);
+        fillCheckBox.setPreferredSize(new Dimension(100, 20));
+
+        panelFill.add(getSeparator());
+        panelFill.add(new JLabel(" オプション:"));
+        panelFill.add(fillCheckBox);
+
+        /*
         テキストパネル
          */
         panelText = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 0));
@@ -111,6 +129,7 @@ class OptionBar extends JPanel {
 
         JCheckBox brushCheckBox = new JCheckBox("ブラシ");
         brushCheckBox.setName("TextBrushOption");
+        brushCheckBox.setActionCommand("TextBrushOption");
         brushCheckBox.setBackground(Color.LIGHT_GRAY);
         brushCheckBox.setPreferredSize(new Dimension(100, 20));
 
@@ -161,6 +180,7 @@ class OptionBar extends JPanel {
         this.add(title);
         this.add(panelSize);
         this.add(panelStyle);
+        this.add(panelFill);
         this.add(panelText);
         this.add(panelStyleBrush);
 
@@ -168,6 +188,7 @@ class OptionBar extends JPanel {
         sizeSlider.addChangeListener(listener);
         radioSharp.addActionListener(listener);
         radioRound.addActionListener(listener);
+        fillCheckBox.addActionListener(listener);
         fontsComboBox.addItemListener(listener);
         fontSizeBox.addItemListener(listener);
         inputTextField.getDocument().addDocumentListener(listener);
@@ -211,6 +232,11 @@ class OptionBar extends JPanel {
             prevFontSize = fontSize;
             fontSizeBox.setSelectedItem(fontSize);
         }
+    }
+
+    void setFillButton(boolean isVisible, boolean isSelected){
+        panelFill.setVisible(isVisible);
+        fillCheckBox.setSelected(isSelected);
     }
 
     void restoreFontSize(){

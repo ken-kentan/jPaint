@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class ToolController {
     private Tool tool;
-    private Tool line, rect, oval, text, pen, brush, dropper,  eraser;
+    private Tool line, rect, oval, text, pen, brush, dropper, eraser;
 
     public ToolController(){
         line    = new Tool(Tool.TYPE.LINE);
@@ -136,6 +136,23 @@ public class ToolController {
         System.out.println("Tool shape(" + isShape + ") set.");
     }
 
+    public void setFill(boolean isFill){
+        switch (tool.get()){
+            case RECT:
+                rect.isFill = isFill;
+                tool = rect;
+                break;
+            case OVAL:
+                oval.isFill = isFill;
+                tool = oval;
+                break;
+        }
+
+        tool.update();
+
+        System.out.println("Tool fill(" + isFill + ") set.");
+    }
+
     public void setBrush(boolean isCircle){
         switch (tool.get()){
             case BRUSH:
@@ -203,6 +220,11 @@ public class ToolController {
         return tool.size;
     }
 
+    public int getRoundRac(){
+        if(tool.isShape) return 0;
+        else             return tool.size;
+    }
+
     public CornerRadioButton.TYPE getCornerType(){
         if(tool.isShape){
             return CornerRadioButton.TYPE.SHARP;
@@ -227,6 +249,14 @@ public class ToolController {
         tool.color = new Color( (color & 0x00ff0000) >> 16, (color & 0x0000ff00) >> 8, color & 0x000000ff, (color>>24) & 0xff);
 
         return tool.color;
+    }
+
+    public boolean isShape(){
+        return tool.isShape;
+    }
+
+    public boolean isFill(){
+        return tool.isFill;
     }
 
     public boolean isStamp(){

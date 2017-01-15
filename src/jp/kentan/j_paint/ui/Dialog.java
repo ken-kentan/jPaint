@@ -107,7 +107,7 @@ public class Dialog {
 
             String suffix = FileMenu.getSuffix(file.getName());
 
-            if(suffix == null) file = new File(file.getAbsoluteFile() + ".png");
+            if(suffix.equals("")) file = new File(file.getAbsoluteFile() + ".png"); //拡張子未指定の場合PNGで保存
 
             if (file.exists()) {
                 switch (showConfirmMsg(file.getName() + " は既に存在します。\n上書きしますか？", JOptionPane.YES_NO_CANCEL_OPTION)) {

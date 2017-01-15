@@ -19,9 +19,10 @@ public class Tool {
     Font font = FontsComboBox.getDefaultFont();
     String text = "Text";
     BufferedImage image;
-    boolean isShape = true;
-    boolean isCircle = true; //Brush, Eraser
-    boolean isStamp = true;
+    boolean isShape = true;  //角形状
+    boolean isFill = false;  //塗りつぶし
+    boolean isCircle = true; //Brush, Eraser形状
+    boolean isStamp = true;  //Textをスタンプ化
     int size = 1;
 
     Tool(TYPE type){

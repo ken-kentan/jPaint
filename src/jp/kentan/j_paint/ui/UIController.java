@@ -83,8 +83,8 @@ public class UIController {
         }
     }
 
-    //オプションパネル更新
-    public void updateOptionBar(Tool.TYPE type, int size, CornerRadioButton.TYPE typeCorner, BrushRadioButton.TYPE typeBrush){
+    //オプションバー更新
+    public void updateOptionBar(Tool.TYPE type, int size, CornerRadioButton.TYPE typeCorner, BrushRadioButton.TYPE typeBrush, boolean isFill){
         window.option.title.setText(OptionBar.toolName[type.ordinal()]);
         updateToolSize(size);
 
@@ -106,27 +106,28 @@ public class UIController {
             window.option.setBrushButton(null);
         }
 
+        window.option.setFillButton(type == Tool.TYPE.RECT || type == Tool.TYPE.OVAL, isFill);
         window.option.setFontPanel(type == Tool.TYPE.TEXT);
     }
 
-    //オプションパネルのツール太さ更新
+    //オプションバーのツール太さ更新
     public void updateToolSize(int size){
         window.option.sizeSlider.setValue(size);
         window.option.sizeTextField.setText(size + " px");
     }
 
-    //オプションパネルのツール太さ復元
+    //オプションバーのツール太さ復元
     public void restoreToolSize(){
         int size = window.option.sizeSlider.getValue();
         window.option.sizeTextField.setText(size + " px");
     }
 
-    //オプションパネルのフォントサイズ更新
+    //オプションバーのフォントサイズ更新
     public void updateFontSize(int size){
         window.option.setFontSize(size + " px");
     }
 
-    //オプションパネルのフォントサイズ復元
+    //オプションバーのフォントサイズ復元
     public void restoreFontSize(){
         window.option.restoreFontSize();
     }

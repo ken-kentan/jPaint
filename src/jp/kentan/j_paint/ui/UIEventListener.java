@@ -56,8 +56,13 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
         }else if(obj instanceof JCheckBox){
             JCheckBox checkBox = (JCheckBox)obj;
 
-            if(checkBox.getName().equals("TextBrushOption")){
-                controller.setLayerToolTextBrush(checkBox.isSelected());
+            switch (checkBox.getActionCommand()){
+                case "FillOption":
+                    controller.setLayerToolFill(checkBox.isSelected());
+                    break;
+                case "TextBrushOption":
+                    controller.setLayerToolTextBrush(checkBox.isSelected());
+                    break;
             }
         }else if(obj instanceof JMenuItem){
             File file;

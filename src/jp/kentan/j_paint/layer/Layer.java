@@ -41,7 +41,8 @@ class Layer extends BufferedImage {
         g = this.createGraphics();
         g.setColor(Color.BLACK);
         g.setBackground(ALPHA);
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
         g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
 
@@ -90,7 +91,13 @@ class Layer extends BufferedImage {
                 break;
             case RECT:
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
-                g.drawRect(x, y, width, height);
+
+                if(tool.isFill()){
+                    g.fillRoundRect(x, y, width, height, tool.getRoundRac(), tool.getRoundRac());
+                }else{
+                    if(tool.isShape()) g.drawRect(x, y, width, height);
+                    else g.drawRoundRect(x, y, width, height, tool.getRoundRac(), tool.getRoundRac());
+                }
                 break;
             case OVAL:
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
@@ -100,7 +107,9 @@ class Layer extends BufferedImage {
 
                 g.setColor(tool.getColor());
                 g.setStroke(tool.getStroke());
-                g.drawOval(x, y, width, height);
+
+                if(tool.isFill()) g.fillOval(x, y, width, height);
+                else              g.drawOval(x, y, width, height);
                 break;
             case TEXT:
                 if(tool.isStamp()) return;
@@ -165,11 +174,21 @@ class Layer extends BufferedImage {
                 break;
             case RECT:
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
-                g.drawRect(x, y, width, height);
+
+                if(tool.isFill()){
+                    g.fillRoundRect(x, y, width, height, tool.getRoundRac(), tool.getRoundRac());
+                }else{
+                    if(tool.isShape()) g.drawRect(x, y, width, height);
+                    else               g.drawRoundRect(x, y, width, height, tool.getRoundRac(), tool.getRoundRac());
+                }
                 break;
             case OVAL:
                 g.clearRect(0, 0, this.getWidth(), this.getHeight());
-                g.drawOval(x, y, width, height);
+                g.setColor(tool.getColor());
+                g.setStroke(tool.getStroke());
+
+                if(tool.isFill()) g.fillOval(x, y, width, height);
+                else              g.drawOval(x, y, width, height);
                 break;
             case PEN:
             case BRUSH:

@@ -21,5 +21,4 @@ public class R {
 
     public static final ImageIcon CIRCLE = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/CIRCLE.png"));
     public static final ImageIcon SQUARE = new ImageIcon(R.class.getResource("/jp/kentan/j_paint/resources/SQUARE.png"));
-
 }

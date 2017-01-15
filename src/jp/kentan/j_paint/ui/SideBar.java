@@ -130,7 +130,7 @@ class SideBar extends JPanel {
         this.add(panelTools);
     }
 
-    public void setColorPanel(Color color){
+    void setColorPanel(Color color){
         panelColor.setBackground(color);
     }
 }
