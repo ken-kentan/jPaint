@@ -145,16 +145,18 @@ public class JPaintController {
         try{
             image = layer.merge(suffix);
             isWrite = ImageIO.write(image, suffix, file);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            Dialog.showWarningMsg("保存に失敗しました。\nエラー詳細: " + e.getMessage());
+        } catch (Exception e){
+            System.out.println(e);
+            Dialog.showWarningMsg("保存に失敗しました。\nエラー詳細: " + (file.canWrite() ? e.getLocalizedMessage() : "ファイルへのアクセスが拒否されました。"));
             return false;
         }
 
         if(!isWrite){
-            Dialog.showWarningMsg("保存に失敗しました。");
+            Dialog.showWarningMsg("保存に失敗しました。\n拡張子が正しく入力されているか確認して下さい。");
             return false;
         }
+
+        layer.updateLayerIndex();
 
         path = file;
         updateWindowTitle();

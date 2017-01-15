@@ -146,11 +146,7 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
     public BufferedImage merge(String suffix){
         BufferedImage image;
 
-        if(suffix == null){
-            suffix = "png";
-        }else{
-            saveLayerIndex = currentLayerIndex;
-        }
+        if(suffix == null) suffix = "png";
 
         if(isSupportAlpha(suffix)){
             image = new BufferedImage(sizeCanvas.width, sizeCanvas.height, BufferedImage.TYPE_4BYTE_ABGR);
@@ -174,6 +170,11 @@ public class LayerController extends JPanel implements MouseListener, MouseMotio
         System.out.println("image merged.(" + layerList.size() + " layers)");
 
         return image;
+    }
+
+    //現在のレイヤーを保存レイヤーに指定
+    public void updateLayerIndex(){
+        saveLayerIndex = currentLayerIndex;
     }
 
     //静止状態でテキストが更新された際に強制的に再描写
