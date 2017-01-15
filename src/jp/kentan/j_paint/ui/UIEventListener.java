@@ -152,25 +152,29 @@ class UIEventListener implements ActionListener, ChangeListener, MouseListener, 
     }
 
     public void removeUpdate(DocumentEvent e) {
-        Document doc = e.getDocument();
+        final Document doc = e.getDocument();
 
-        SwingUtilities.invokeLater(() -> {
-            try {
-                controller.setLayerToolText(doc.getText(0 , doc.getLength()));
-            }catch (Exception exc){
-                Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    controller.setLayerToolText(doc.getText(0 , doc.getLength()));
+                }catch (Exception exc){
+                    Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
+                }
             }
         });
     }
 
     public void insertUpdate(DocumentEvent e) {
-        Document doc = e.getDocument();
+        final Document doc = e.getDocument();
 
-        SwingUtilities.invokeLater(() -> {
-            try {
-                controller.setLayerToolText(doc.getText(0 , doc.getLength()));
-            }catch (Exception exc){
-                Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    controller.setLayerToolText(doc.getText(0 , doc.getLength()));
+                }catch (Exception exc){
+                    Dialog.showWarningMsg("入力を処理できませんでした。\nエラー: " + exc.getMessage());
+                }
             }
         });
     }
