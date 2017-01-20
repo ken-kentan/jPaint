@@ -36,7 +36,7 @@ class OptionBar extends JPanel {
         太さパネル
          */
         panelSize = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 0));
-        panelSize.setPreferredSize(new Dimension(190, 20));
+        panelSize.setPreferredSize(new Dimension(192, 20));
         panelSize.setBackground(Color.LIGHT_GRAY);
 
         sizeTextField = new JTextField("1 px");
