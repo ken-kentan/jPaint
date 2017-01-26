@@ -68,7 +68,7 @@ public class ToolController {
         pen.color  = color;
         brush.color = color;
 
-        tool.color = color;
+        if(tool.get() != Tool.TYPE.ERASER) tool.color = color;
 
         tool.update();
 
