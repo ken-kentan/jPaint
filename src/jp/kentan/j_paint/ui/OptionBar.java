@@ -23,14 +23,14 @@ class OptionBar extends JPanel {
     JTextField sizeTextField;
     JSlider sizeSlider;
 
-    static final String[] toolName = new String[]{"直線", "長方形", "楕円形", "テキスト", "ペン", "ブラシ", "スポイド", "消しゴム"};
+    static final String[] TOOL_NAME = new String[]{"直線", "長方形", "楕円形", "テキスト", "ペン", "ブラシ", "スポイド", "消しゴム"};
 
     OptionBar(UIEventListener listener){
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
         this.setPreferredSize(new Dimension(1920, 30));
         this.setBackground(Color.LIGHT_GRAY);
 
-        title = new JLabel(toolName[0]);
+        title = new JLabel(TOOL_NAME[0]);
 
         /*
         太さパネル
